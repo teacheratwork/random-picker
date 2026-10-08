@@ -33,3 +33,7 @@ Tutto resta salvato nel telefono anche se chiudi l'app, fino a «Resetta». I da
 ## Icone
 
 Sono generate da `tools/make_icons.py` (Python + Pillow): `python tools/make_icons.py` dalla cartella del progetto.
+
+## QR code
+
+`qr-code.png` (e `qr-code.svg`, per la stampa) apre `https://teacheratwork.github.io/random-picker/`: inquadralo con la fotocamera del telefono per arrivare subito alla pagina da installare.
