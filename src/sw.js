@@ -6,7 +6,7 @@
  * Every time you change ANY file of the app, raise the version number below
  * (v1 -> v2 -> v3 ...). Otherwise phones keep using the old copy.
  */
-const CACHE = "random-picker-v2";
+const CACHE = "random-picker-v3";
 
 const FILES = [
   "./",

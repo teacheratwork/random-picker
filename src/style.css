@@ -12,6 +12,7 @@
   --line-ink: #10151d;    /* icon on the draw button */
   --ochre: #d4a853;       /* small accents only */
   --off: #39424f;         /* disabled / excluded */
+  --gap: clamp(12px, 4dvh, 36px); /* main vertical spacing */
   color-scheme: dark;
 }
 
@@ -36,7 +37,7 @@ button {
 }
 
 /* One column filling the screen, from top to bottom:
-   range, tile, draw button, status box, switch, Resetta, credit. */
+   range, tile, draw button, status box, switch, Resetta. */
 .app {
   display: flex;
   flex-direction: column;
@@ -100,32 +101,33 @@ button {
 
 /* ------------------------------------------------------------------
    2. Drawn number as a flat tile.
-   Same space above and below the tile (36px); the hint sits inside the
-   space below, so it never moves the rest of the screen.
+   Same space above and below the tile; the hint sits inside the space
+   below, so it never moves the rest of the screen. Sizes and gaps use
+   dvh (screen height) so that everything fits without scrolling.
    ------------------------------------------------------------------ */
 .result {
   position: relative;
   display: flex;
   justify-content: center;
-  margin: 36px 0;
+  margin: var(--gap) 0;
 }
 
 .result-number {
-  width: min(64vw, 260px);
+  width: min(64vw, 260px, 30dvh);
   aspect-ratio: 1;
   display: grid;
   place-items: center;
   background: var(--surface);
   border: 2px solid var(--line);
   border-radius: 28px;
-  font-size: clamp(5rem, 30vmin, 8.5rem);
+  font-size: min(8.5rem, 15dvh, 30vw);
   font-weight: 700;
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
 /* Longer numbers get smaller so they stay inside the tile. */
-.result-number.digits-3 { font-size: clamp(3.6rem, 21vmin, 6rem); }
-.result-number.digits-4 { font-size: clamp(2.8rem, 16vmin, 4.6rem); }
+.result-number.digits-3 { font-size: min(6rem, 10.5dvh, 21vw); }
+.result-number.digits-4 { font-size: min(4.6rem, 8dvh, 16vw); }
 /* Before the first draw: a faded "?". */
 .result-number.empty { color: var(--off); }
 
@@ -146,8 +148,8 @@ button {
 .draw-btn {
   align-self: center;
   width: 72%;
-  height: 76px;
-  margin-bottom: 36px;
+  height: clamp(56px, 9dvh, 76px);
+  margin-bottom: var(--gap);
   border: none;
   border-radius: 10px;
   background: var(--line);
@@ -261,7 +263,7 @@ button {
   gap: 14px;
   min-height: 48px;
   padding: 6px 0;
-  margin-bottom: 36px;
+  margin-bottom: var(--gap);
   border-top: 1.5px solid var(--line);
   border-bottom: 1.5px solid var(--line);
   font-size: 1.15rem;
@@ -300,7 +302,7 @@ button {
 .switch-row input:focus-visible + .switch { outline: 3px solid var(--line); outline-offset: 3px; }
 
 /* ------------------------------------------------------------------
-   6. Resetta (and the other secondary buttons) + credit line
+   6. Resetta (and the other secondary buttons)
    ------------------------------------------------------------------ */
 .reset-btn,
 .primary-btn {
@@ -324,15 +326,14 @@ button {
   font-weight: 600;
 }
 
-/* Pushed to the very bottom of the screen by margin-top: auto. */
-.credit {
-  margin-top: auto;
-  padding-top: 20px;
-  text-align: center;
-  font-size: 0.75rem;
-  letter-spacing: 0.04em;
-  color: var(--muted);
-  opacity: 0.7;
+/* Short screens: slightly smaller range and status box. */
+@media (max-height: 760px) {
+  .app { padding-top: max(12px, env(safe-area-inset-top)); }
+  .range { padding-bottom: 8px; }
+  .range-value, .range-input { min-height: 44px; font-size: 2rem; }
+  .status-box { padding-top: 8px; padding-bottom: 8px; margin-bottom: 10px; }
+  .status-counter { margin-top: 2px; font-size: 1.3rem; }
+  .switch-row { min-height: 44px; padding: 2px 0; }
 }
 
 /* ------------------------------------------------------------------
