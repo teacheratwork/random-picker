@@ -162,7 +162,9 @@ function render() {
   const result = $("result");
   result.textContent = state.last === null ? "?" : state.last;
   result.classList.toggle("empty", state.last === null);
-  result.classList.toggle("small", String(result.textContent).length > 3);
+  const digits = String(result.textContent).length; // shrink long numbers to fit the tile
+  result.classList.toggle("digits-3", digits === 3);
+  result.classList.toggle("digits-4", digits >= 4);
 
   const left = candidates().length;
   let hint = "";

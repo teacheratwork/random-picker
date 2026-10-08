@@ -18,7 +18,7 @@ Plan and design decisions: `../../_plans/_done/2026-10-08-dev-app-numeri-casuali
 ```
 src/                    the app — exactly what gets uploaded to the hosting
   index.html            screen + panels (<dialog>): history, exclusions, confirm
-  style.css             mobile portrait layout, light/dark via prefers-color-scheme
+  style.css             mobile portrait layout, always dark (design "Quaderno scuro")
   app.js                all logic (state → save → render), commented
   manifest.webmanifest  installability: name, icons, standalone, portrait
   sw.js                 service worker: offline cache (cache-first)
@@ -27,6 +27,18 @@ tools/make_icons.py     regenerates icons/ with Pillow (dev only)
 ```
 
 No build step, no dependencies, no external requests.
+
+## Design (chosen with the user, 2026-10-08)
+
+"Quaderno scuro": always dark (navy `#161c26`), thin blue-grey lines
+(`#6f8bb5`) separating the parts, ochre (`#d4a853`) for small accents only.
+Top to bottom: "DA | A" (dashed divider, underlined) → drawn number in a flat
+rounded tile (equal 36px space above and below; hints sit inside the space
+below) → wide centred draw button with an ochre offset shadow → status box with
+an ochre left band → switch between two lines → small "Resetta" → credit
+"Designed by teacheratwork" pinned to the bottom. Long numbers shrink
+(`digits-3`, `digits-4` classes) to stay inside the tile. Mockups of the
+rejected variants were throwaway (scratchpad), not kept.
 
 ## Behaviour (agreed with the user)
 

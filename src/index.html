@@ -5,8 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Numeri casuali</title>
   <meta name="description" content="Estrai numeri casuali in un intervallo, con o senza ripetizione.">
-  <meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#1b1d22" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#161c26">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon-192.png" type="image/png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
@@ -29,13 +28,21 @@
       </div>
     </section>
 
-    <!-- 2. The drawn number, as large as possible. -->
+    <!-- 2. The drawn number, shown as a tile. -->
     <section class="result" aria-label="Numero estratto">
       <output id="result" class="result-number" aria-live="polite">?</output>
       <p id="resultHint" class="result-hint"></p>
     </section>
 
-    <!-- 3. Status box: mode title, counter, ⋮ menu. -->
+    <!-- 3. Draw button, right under the number. -->
+    <button type="button" class="draw-btn" id="drawBtn" aria-label="Estrai un numero">
+      <svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"/><path d="M4 3v5h5"/>
+        <path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"/><path d="M20 21v-5h-5"/>
+      </svg>
+    </button>
+
+    <!-- 4. Status box: mode title, counter, ⋮ menu. -->
     <section class="status-box">
       <div class="status-text">
         <h2 id="modeTitle" class="status-title">Senza ripetizione</h2>
@@ -50,23 +57,17 @@
       </div>
     </section>
 
-    <!-- 4. Repetition switch. -->
+    <!-- 5. Repetition switch. -->
     <label class="switch-row">
       <input type="checkbox" role="switch" id="repeatSwitch">
       <span class="switch" aria-hidden="true"></span>
       <span>Consenti ripetizione</span>
     </label>
 
-    <!-- 5. Bottom bar: reset + draw. -->
-    <section class="actions">
-      <button type="button" class="reset-btn" id="resetBtn">Resetta</button>
-      <button type="button" class="draw-btn" id="drawBtn" aria-label="Estrai un numero">
-        <svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"/><path d="M4 3v5h5"/>
-          <path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"/><path d="M20 21v-5h-5"/>
-        </svg>
-      </button>
-    </section>
+    <!-- 6. Reset, small and far from the draw button. -->
+    <button type="button" class="reset-btn" id="resetBtn">Resetta</button>
+
+    <footer class="credit">Designed by teacheratwork</footer>
   </main>
 
   <!-- History panel -->
