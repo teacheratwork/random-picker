@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Numeri casuali</title>
+  <meta name="description" content="Estrai numeri casuali in un intervallo, con o senza ripetizione.">
+  <meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1b1d22" media="(prefers-color-scheme: dark)">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+
+    <!-- 1. Range: "DA n A m". Tapping a number turns it into an input field. -->
+    <section class="range" aria-label="Intervallo">
+      <div class="range-item">
+        <span class="range-label">DA</span>
+        <button type="button" class="range-value" id="minBtn" aria-label="Modifica il numero iniziale">1</button>
+        <input type="number" class="range-input" id="minInput" inputmode="numeric" min="0" max="9999" step="1" hidden aria-label="Numero iniziale">
+      </div>
+      <div class="range-item">
+        <span class="range-label">A</span>
+        <button type="button" class="range-value" id="maxBtn" aria-label="Modifica il numero finale">26</button>
+        <input type="number" class="range-input" id="maxInput" inputmode="numeric" min="0" max="9999" step="1" hidden aria-label="Numero finale">
+      </div>
+    </section>
+
+    <!-- 2. The drawn number, as large as possible. -->
+    <section class="result" aria-label="Numero estratto">
+      <output id="result" class="result-number" aria-live="polite">?</output>
+      <p id="resultHint" class="result-hint"></p>
+    </section>
+
+    <!-- 3. Status box: mode title, counter, ⋮ menu. -->
+    <section class="status-box">
+      <div class="status-text">
+        <h2 id="modeTitle" class="status-title">Senza ripetizione</h2>
+        <p id="counter" class="status-counter">0/26</p>
+      </div>
+      <button type="button" class="menu-btn" id="menuBtn" aria-label="Altre opzioni" aria-haspopup="true" aria-expanded="false">
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+      </button>
+      <div class="menu" id="menu" role="menu" hidden>
+        <button type="button" role="menuitem" id="historyItem">Storico estratti</button>
+        <button type="button" role="menuitem" id="excludeItem">Escludi numeri</button>
+      </div>
+    </section>
+
+    <!-- 4. Repetition switch. -->
+    <label class="switch-row">
+      <input type="checkbox" role="switch" id="repeatSwitch">
+      <span class="switch" aria-hidden="true"></span>
+      <span>Consenti ripetizione</span>
+    </label>
+
+    <!-- 5. Bottom bar: reset + draw. -->
+    <section class="actions">
+      <button type="button" class="reset-btn" id="resetBtn">Resetta</button>
+      <button type="button" class="draw-btn" id="drawBtn" aria-label="Estrai un numero">
+        <svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"/><path d="M4 3v5h5"/>
+          <path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"/><path d="M20 21v-5h-5"/>
+        </svg>
+      </button>
+    </section>
+  </main>
+
+  <!-- History panel -->
+  <dialog id="historyDialog" class="panel" aria-labelledby="historyTitle">
+    <header class="panel-head">
+      <h2 id="historyTitle">Storico estratti</h2>
+      <button type="button" class="close-btn" data-close aria-label="Chiudi">✕</button>
+    </header>
+    <ol id="historyList" class="history-list" reversed></ol>
+    <p id="historyEmpty" class="panel-empty">Nessun numero estratto.</p>
+  </dialog>
+
+  <!-- Exclusion panel -->
+  <dialog id="excludeDialog" class="panel" aria-labelledby="excludeTitle">
+    <header class="panel-head">
+      <h2 id="excludeTitle">Escludi numeri</h2>
+      <button type="button" class="close-btn" data-close aria-label="Chiudi">✕</button>
+    </header>
+    <p class="panel-note">Tocca un numero per escluderlo o riammetterlo.</p>
+    <div id="excludeGrid" class="exclude-grid"></div>
+    <footer class="panel-foot">
+      <button type="button" class="reset-btn" id="readmitAllBtn">Riammetti tutti</button>
+    </footer>
+  </dialog>
+
+  <!-- Reusable confirmation dialog -->
+  <dialog id="confirmDialog" class="panel confirm" aria-labelledby="confirmText">
+    <p id="confirmText"></p>
+    <footer class="panel-foot">
+      <button type="button" class="reset-btn" id="confirmNo">Annulla</button>
+      <button type="button" class="primary-btn" id="confirmYes">Conferma</button>
+    </footer>
+  </dialog>
+
+  <!-- Short message for invalid input -->
+  <div id="toast" class="toast" role="status" hidden></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

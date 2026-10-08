@@ -1,0 +1,409 @@
+/* ------------------------------------------------------------------
+   Colours: defined once here, redefined for dark mode below.
+   ------------------------------------------------------------------ */
+:root {
+  --bg: #f4f1ea;          /* paper-like background */
+  --surface: #ffffff;     /* boxes, panels */
+  --ink: #1f2328;         /* main text */
+  --muted: #6b6f76;       /* secondary text */
+  --line: #1f2328;        /* outlines, as in the sketch */
+  --accent: #2f6fde;      /* draw button, switch on */
+  --accent-ink: #ffffff;
+  --excluded: #c8c3b8;
+  --radius: 22px;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1b1d22;
+    --surface: #262930;
+    --ink: #eef0f3;
+    --muted: #a3a8b1;
+    --line: #cfd3da;
+    --accent: #5b8ff0;
+    --accent-ink: #0d1117;
+    --excluded: #4a4e57;
+    color-scheme: dark;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Base
+   ------------------------------------------------------------------ */
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* One column filling the screen; the result takes all the free space. */
+.app {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 100dvh;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: max(20px, env(safe-area-inset-top)) 20px max(20px, env(safe-area-inset-bottom));
+}
+
+/* ------------------------------------------------------------------
+   1. Range "DA n A m"
+   ------------------------------------------------------------------ */
+.range {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+}
+
+.range-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.range-label {
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.range-value,
+.range-input {
+  min-width: 96px;
+  min-height: 56px;
+  font-size: 2.4rem;
+  font-weight: 600;
+  text-align: center;
+  border-radius: 14px;
+}
+
+.range-value {
+  background: transparent;
+  border: 2px dashed transparent;
+  padding: 0 12px;
+}
+/* Dashed outline hints that the number can be tapped and changed. */
+.range-value:hover,
+.range-value:focus-visible { border-color: var(--muted); outline: none; }
+
+.range-input {
+  width: 120px;
+  background: var(--surface);
+  color: var(--ink);
+  border: 2px solid var(--accent);
+  padding: 0 8px;
+}
+
+/* ------------------------------------------------------------------
+   2. Drawn number
+   ------------------------------------------------------------------ */
+.result {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 180px;
+}
+
+.result-number {
+  font-size: clamp(6rem, 42vmin, 16rem);
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+/* Before the first draw: a faded "?" placeholder. */
+.result-number.empty { color: var(--excluded); }
+/* 4-digit numbers need a smaller size. */
+.result-number.small { font-size: clamp(3rem, 20vmin, 8rem); }
+
+.result-hint {
+  min-height: 1.4em;
+  margin: 8px 0 0;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* ------------------------------------------------------------------
+   3. Status box (mode, counter, ⋮ menu)
+   ------------------------------------------------------------------ */
+.status-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 14px 8px 14px 56px; /* left padding balances the ⋮ button */
+}
+
+.status-text {
+  flex: 1;
+  text-align: center;
+}
+
+.status-title {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.status-counter {
+  margin: 6px 0 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.menu-btn {
+  width: 48px;
+  height: 48px;
+  border: none;
+  background: transparent;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+.menu-btn svg { fill: currentColor; }
+.menu-btn:active { background: var(--bg); }
+
+.menu {
+  position: absolute;
+  right: 8px;
+  bottom: calc(100% - 8px);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  min-width: 210px;
+  background: var(--surface);
+  border: 1px solid var(--muted);
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.18);
+  overflow: hidden;
+}
+.menu[hidden] { display: none; }
+.menu button {
+  min-height: 52px;
+  padding: 0 18px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  font-size: 1.05rem;
+}
+.menu button + button { border-top: 1px solid var(--bg); }
+.menu button:active { background: var(--bg); }
+
+/* ------------------------------------------------------------------
+   4. Switch "Consenti ripetizione"
+   The real checkbox is invisible; .switch draws the track and knob.
+   ------------------------------------------------------------------ */
+.switch-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 48px;
+  font-size: 1.15rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.switch-row input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.switch {
+  position: relative;
+  width: 58px;
+  height: 32px;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  transition: background 0.15s;
+}
+.switch::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--line);
+  border-radius: 50%;
+  background: var(--surface);
+  transition: transform 0.15s;
+}
+.switch-row input:checked + .switch { background: var(--accent); border-color: var(--accent); }
+.switch-row input:checked + .switch::after { transform: translateX(26px); border-color: var(--accent); }
+.switch-row input:focus-visible + .switch { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+/* ------------------------------------------------------------------
+   5. Bottom bar
+   ------------------------------------------------------------------ */
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-left: 12%; /* "Resetta" sits towards the centre, as in the sketch */
+}
+
+.reset-btn,
+.primary-btn {
+  min-height: 52px;
+  padding: 0 26px;
+  border-radius: 999px;
+  font-size: 1.1rem;
+}
+.reset-btn {
+  border: 2px solid var(--line);
+  background: transparent;
+}
+.reset-btn:active { background: var(--surface); }
+
+.primary-btn {
+  border: 2px solid var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.draw-btn {
+  width: 88px;
+  height: 88px;
+  border: none;
+  border-radius: 24px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.2);
+  transition: transform 0.08s;
+}
+.draw-btn:active { transform: scale(0.94); }
+.draw-btn:disabled {
+  background: var(--excluded);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* ------------------------------------------------------------------
+   Panels (<dialog>): history, exclusions, confirmation
+   ------------------------------------------------------------------ */
+.panel {
+  width: min(520px, calc(100vw - 32px));
+  max-height: 80dvh;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+}
+.panel[open] { display: flex; flex-direction: column; }
+.panel::backdrop { background: rgb(0 0 0 / 0.45); }
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 8px 4px 20px;
+}
+.panel-head h2 { margin: 0; font-size: 1.25rem; }
+
+.close-btn {
+  width: 48px;
+  height: 48px;
+  border: none;
+  background: transparent;
+  font-size: 1.3rem;
+}
+
+.panel-note,
+.panel-empty {
+  margin: 4px 20px 12px;
+  color: var(--muted);
+}
+
+.panel-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 12px 20px 20px;
+}
+
+.history-list {
+  margin: 0;
+  padding: 0 20px 16px 20px;
+  overflow-y: auto;
+  list-style: none;
+}
+.history-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 4px;
+  border-bottom: 1px solid var(--bg);
+  font-size: 1.15rem;
+}
+.history-list .ord { color: var(--muted); }
+.history-list .num { font-weight: 700; font-variant-numeric: tabular-nums; }
+
+.exclude-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(54px, 1fr));
+  gap: 8px;
+  padding: 0 20px;
+  overflow-y: auto;
+}
+.exclude-grid button {
+  min-height: 48px;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  background: transparent;
+  font-size: 1.05rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.exclude-grid button[aria-pressed="true"] {
+  background: var(--excluded);
+  border-color: var(--excluded);
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.confirm p {
+  margin: 24px 20px 4px;
+  font-size: 1.1rem;
+  line-height: 1.4;
+}
+
+/* ------------------------------------------------------------------
+   Toast (short message at the bottom)
+   ------------------------------------------------------------------ */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(24px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  max-width: calc(100vw - 32px);
+  padding: 12px 20px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--bg);
+  font-size: 1rem;
+  z-index: 20;
+}
+.toast[hidden] { display: none; }
