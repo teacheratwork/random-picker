@@ -27,7 +27,7 @@ Tutto resta salvato nel telefono anche se chiudi l'app, fino a «Resetta». I da
 1. Modifica i file nella cartella `src/`.
 2. In `src/sw.js` alza il numero di versione: `random-picker-v1` → `random-picker-v2` (poi v3, v4…). **Se lo dimentichi, il telefono continua a usare la versione vecchia.**
 3. Prova sul PC: dal terminale, nella cartella `src/`, `python -m http.server 8000`, poi apri `http://localhost:8000/` in Chrome.
-4. Carica il **contenuto** della cartella `src/` sull'hosting (sostituendo i file vecchi).
+4. Fai il commit e il push verso GitHub (`git push github main`): GitHub Pages pubblica da solo la cartella `src/` in un paio di minuti, all'indirizzo `https://teacheratwork.github.io/random-picker/`. Fai anche `git push origin main` per la copia su Forgejo.
 5. Sul telefono apri l'app, chiudila e riaprila: alla seconda apertura usa la versione nuova.
 
 ## Icone

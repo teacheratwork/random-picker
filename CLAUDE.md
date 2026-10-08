@@ -70,11 +70,17 @@ loads with the server stopped.
 
 ## Hosting
 
-Must be served over **HTTPS** for installation (any static host; relative paths,
-works in a sub-folder). Public hosting chosen by the user on 2026-10-08;
-provider not chosen yet → **TBD**, record URL here once published.
+**GitHub Pages** (chosen 2026-10-08), GitHub account `teacheratwork`:
+repo `teacheratwork/random-picker` (public), remote `github`.
+`.github/workflows/pages.yml` publishes `src/` at every push to `main`
+(Settings → Pages → Source: "GitHub Actions").
+Expected URL: `https://teacheratwork.github.io/random-picker/` (relative paths,
+so the sub-folder is fine). Status: see the plan's implementation notes.
 
 ## Git
 
-Repo with remote `forgejo:samuele/random-picker.git` (Forgejo on the NAS, see
+Two remotes: `origin` = `forgejo:samuele/random-picker.git` (backup of the history, private)
+and `github` = `https://github.com/teacheratwork/random-picker.git` (publishing). Push to both:
+`git push origin main` and `git push github main`.
+Forgejo (Forgejo on the NAS, see
 `../_context/git-workflow.md`). Commit messages in English.
