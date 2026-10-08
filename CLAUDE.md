@@ -82,5 +82,4 @@ so the sub-folder is fine). Status: see the plan's implementation notes.
 Two remotes: `origin` = `forgejo:samuele/random-picker.git` (backup of the history, private)
 and `github` = `https://github.com/teacheratwork/random-picker.git` (publishing). Push to both:
 `git push origin main` and `git push github main`.
-Forgejo (Forgejo on the NAS, see
-`../_context/git-workflow.md`). Commit messages in English.
+Forgejo is on the NAS, see `../_context/git-workflow.md`. Commit messages in English.
